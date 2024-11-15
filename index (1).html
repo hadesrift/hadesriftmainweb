@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hades Rift Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            flex-direction: column;
+            margin: 0;
+            overflow: hidden;
+            background-color: #2e2e2e;
+            background: repeating-linear-gradient(
+                45deg,
+                #333 0px,
+                #333 1px,
+                #444 1px,
+                #444 20px
+            );
+            transition: background-position 0.05s;
+        }
+
+        .title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #f39c12;
+        }
+
+        .login-container {
+            position: relative;
+            width: 300px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .monkey {
+            width: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        /* Monkey eye and hand effects */
+        .monkey .eye {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 25%;
+        }
+
+        .monkey .eye.left {
+            left: 25%;
+        }
+
+        .monkey .eye.right {
+            right: 25%;
+        }
+
+        .monkey .hand {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #555;
+            border-radius: 50%;
+            top: 20%;
+            left: 10%;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .monkey .hand.right {
+            left: auto;
+            right: 10%;
+        }
+
+        .monkey.looking { transform: translateY(-10px); }
+        .monkey.covering-eyes .hand { opacity: 1; transform: translateY(-10px); }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #555;
+            color: white;
+        }
+
+        .show-password {
+            color: #f39c12;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .show-password:hover {
+            text-decoration: underline;
+        }
+
+        .auth-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .auth-button {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: #555;
+            transition: background-color 0.3s;
+            gap: 8px;
+        }
+
+        .auth-button img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .auth-button:hover {
+            background-color: #444;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f39c12;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        /* Created by Sayanth text */
+        .footer-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Hades Rift</div>
+    <div class="login-container">
+        <div class="monkey" id="monkey">
+            <!-- Monkey's eyes that follow the mouse -->
+            <div class="eye left" id="leftEye"></div>
+            <div class="eye right" id="rightEye"></div>
+            <!-- Hands to cover the eyes when typing password -->
+            <div class="hand left"></div>
+            <div class="hand right"></div>
+        </div>
+        <input type="email" id="email" class="input-field" placeholder="Email">
+        <input type="password" id="password" class="input-field" placeholder="Password">
+        <div id="showPassword" class="show-password">Show Password</div>
+        <button>Login</button>
+
+        <div class="auth-buttons">
+            <div class="auth-button" id="googleLogin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" alt="Google Logo">
+                <span>Login with Google</span>
+            </div>
+            <div class="auth-button" id="discordLogin">
+                <img src="https://upload.wikimedia.org/wikipedia/en/9/98/Discord_logo.svg" alt="Discord Logo">
+                <span>Login with Discord</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer-text">Created by Sayanth</div>
+
+    <script>
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const showPasswordText = document.getElementById('showPassword');
+        const monkeyImage = document.getElementById('monkey');
+        const leftEye = document.getElementById('leftEye');
+        const rightEye = document.getElementById('rightEye');
+        const hands = document.querySelectorAll('.hand');
+
+        emailField.addEventListener('focus', () => {
+            monkeyImage.classList.add('looking');
+        });
+
+        emailField.addEventListener('blur', () => {
+            monkeyImage.classList.remove('looking');
+        });
+
+        passwordField.addEventListener('focus', () => {
+            monkeyImage.classList.add('covering-eyes');
+        });
+
+        passwordField.addEventListener('blur', () => {
+            monkeyImage.classList.remove('covering-eyes');
+        });
+
+        showPasswordText.addEventListener('click', () => {
+            const isPasswordVisible = passwordField.type === 'text';
+            passwordField.type = isPasswordVisible ? 'password' : 'text';
+            monkeyImage.classList.toggle('peeking', !isPasswordVisible);
+        });
+
+        // Function to make eyes follow the cursor
+        document.addEventListener('mousemove', (e) => {
+            const rect = monkeyImage.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const angleLeft = Math.atan2(e.pageY - (centerY - 10), e.pageX - (centerX - 20));
+            const angleRight = Math.atan2(e.pageY - (centerY - 10), e.pageX - (centerX + 20));
+
+            leftEye.style.transform = `translate(${5 * Math.cos(angleLeft)}px, ${5 * Math.sin(angleLeft)}px)`;
+            rightEye.style.transform = `translate(${5 * Math.cos(angleRight)}px, ${5 * Math.sin(angleRight)}px)`;
+        });
+
+        document.getElementById('googleLogin').addEventListener('click', () => {
+            window.location.href = 'https://accounts.google.com/signin';
+        });
+
+        document.getElementById('discordLogin').addEventListener('click', () => {
+            window.location.href = 'https://discord.com/login';
+        });
+    </script>
+</body>
+</html>
